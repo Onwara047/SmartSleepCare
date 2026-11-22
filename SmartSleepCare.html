@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#e8f3ff">
+<title>Smart Sleep Care | Sleep Assessment</title>
+<style>
+:root{
+ --bg:#f4f7f6;--surface:#fff;--surface2:#f8faf9;--ink:#172b28;--muted:#71817d;
+ --line:#e5ece9;--teal:#167c70;--teal2:#0f6259;--mint:#e6f4ef;--blue:#edf3fb;
+ --amber:#fff4df;--red:#fff0ef;--shadow:0 12px 36px rgba(26,59,51,.07);--radius:20px;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Noto Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.shell{max-width:1440px;margin:auto;padding:24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:15px;background:linear-gradient(145deg,#1d9282,#135f58);display:grid;place-items:center;color:white;font-size:22px;box-shadow:0 8px 18px #167c7033}
+.brand h1{font-size:18px;margin:0;letter-spacing:-.3px}.brand p{font-size:12px;color:var(--muted);margin:3px 0 0}
+.top-actions{display:flex;gap:9px;align-items:center}.pill{border:1px solid var(--line);border-radius:999px;padding:9px 13px;background:#fff;color:var(--muted);font-size:12px}
+.nav{display:flex;gap:7px;background:#eaf0ed;padding:5px;border-radius:14px;width:max-content;margin-bottom:22px}
+.nav button{border:0;background:transparent;padding:10px 17px;border-radius:10px;color:#61716c;font-size:13px;font-weight:650}
+.nav button.active{background:#fff;color:var(--teal2);box-shadow:0 2px 8px #1a3b3310}
+.page{display:none}.page.active{display:block}
+.hero{background:linear-gradient(115deg,#e8f4ef,#eff5f7);border:1px solid #deebe5;border-radius:24px;padding:26px 28px;display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:20px}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--teal);font-weight:800}.hero h2{font-size:26px;line-height:1.25;margin:8px 0 7px;letter-spacing:-.7px}.hero p{margin:0;color:#61736d;font-size:13px;max-width:650px;line-height:1.7}
+.hero-mark{font-size:56px;opacity:.75;padding:0 22px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-6{grid-column:span 6}.span-4{grid-column:span 4}
+.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}.section-head h3{margin:0;font-size:16px}.section-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.step-tag{background:var(--mint);color:var(--teal2);font-size:11px;padding:6px 9px;border-radius:8px;font-weight:750}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label,.question-title{font-size:13px;font-weight:650;color:#344944}.hint{font-size:11px;color:var(--muted);font-weight:400}
+input,select,textarea{width:100%;border:1px solid #dfe8e4;background:#fbfdfc;border-radius:11px;padding:11px 12px;color:var(--ink);outline:none;transition:.18s}
+input:focus,select:focus,textarea:focus{border-color:#68aa9c;box-shadow:0 0 0 3px #167c7014;background:#fff}
+textarea{min-height:84px;resize:vertical}
+.choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:9px}
+.choice{position:relative}.choice input{position:absolute;opacity:0;pointer-events:none}.choice span{display:flex;align-items:center;gap:8px;min-height:42px;border:1px solid var(--line);background:#fbfdfc;border-radius:11px;padding:9px 11px;font-size:12px;color:#52645e;transition:.15s}
+.choice span:before{content:"";width:15px;height:15px;border:1.5px solid #bdcbc5;border-radius:50%;flex:none}
+.choice.multi span:before{border-radius:5px}.choice input:checked+span{border-color:#78b6a8;background:#eef8f4;color:#155f54;font-weight:650}.choice input:checked+span:before{border:5px solid var(--teal);background:#fff}
+.question{padding:15px 0;border-bottom:1px solid #edf1ef}.question:last-child{border:0}.question-title{line-height:1.55}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:10px}
+.scale label{position:relative}.scale input{position:absolute;opacity:0}.scale span{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;border:1px solid var(--line);border-radius:10px;padding:8px 3px;font-size:11px;color:#6c7c76;background:#fbfdfc;min-height:52px}
+.scale b{font-size:15px;color:#354b45}.scale input:checked+span{background:var(--mint);border-color:#71b4a4;color:var(--teal2)}.scale input:checked+span b{color:var(--teal2)}
+.inline-options{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.inline-options .choice span{min-height:38px}
+.actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px}.btn{border:0;border-radius:11px;padding:11px 17px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.primary{background:var(--teal);color:white;box-shadow:0 7px 16px #167c7028}.btn.primary:hover{background:var(--teal2)}.btn.soft{background:#edf4f1;color:#35665b}.btn.ghost{background:#fff;border:1px solid var(--line);color:#61716c}.btn.danger{background:var(--red);color:#b44c47}
+.progress{height:5px;background:#e8efec;border-radius:20px;overflow:hidden;margin:12px 0 20px}.progress i{display:block;height:100%;width:0;background:var(--teal);transition:.2s}
+.note{padding:12px 14px;border-radius:12px;background:#f1f6f4;color:#62736d;font-size:11px;line-height:1.65;margin-top:12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}.kpi{background:#fff;border:1px solid var(--line);border-radius:17px;padding:17px;box-shadow:var(--shadow)}.kpi-top{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}.kpi-icon{width:30px;height:30px;display:grid;place-items:center;border-radius:10px;background:var(--mint);color:var(--teal);font-size:15px}.kpi strong{display:block;font-size:27px;margin:10px 0 3px;letter-spacing:-.8px}.kpi small{color:var(--muted);font-size:11px}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.toolbar input,.toolbar select{max-width:220px;padding:9px 11px;font-size:12px}
+.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;min-width:700px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid #edf1ef;font-size:12px;white-space:nowrap}th{color:#7b8a85;font-weight:650;background:#fbfcfc}td{color:#42564f}tr:hover td{background:#fbfdfc}
+.status{display:inline-flex;padding:5px 9px;border-radius:99px;font-size:10px;font-weight:750}.low{background:#eaf6ef;color:#367554}.mid{background:#fff4df;color:#9b6a19}.high{background:#fff0ef;color:#b34c47}
+.bar-row{display:grid;grid-template-columns:125px 1fr 35px;align-items:center;gap:10px;margin:13px 0;font-size:12px;color:#60716b}.bar{height:8px;border-radius:20px;background:#edf2ef;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#7dc1ae,#167c70);border-radius:20px}
+.empty{text-align:center;padding:38px 15px;color:var(--muted);font-size:13px}.empty b{display:block;font-size:30px;margin-bottom:8px}
+.modal-backdrop{position:fixed;inset:0;background:#142a25a8;display:none;align-items:center;justify-content:center;padding:20px;z-index:10}.modal-backdrop.show{display:flex}.modal{background:white;border-radius:20px;max-width:760px;width:100%;max-height:88vh;overflow:auto;padding:23px;box-shadow:0 25px 80px #0003}.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}.modal-head h3{margin:0}.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.detail{padding:12px;border-radius:12px;background:#f7faf8}.detail small{display:block;color:var(--muted);font-size:10px;margin-bottom:5px}.detail b{font-size:13px;overflow-wrap:anywhere}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:#193d35;color:#fff;padding:12px 18px;border-radius:12px;font-size:12px;opacity:0;pointer-events:none;transition:.25s;z-index:20}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.config{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.config input{flex:1;min-width:260px}.muted{color:var(--muted)}.tiny{font-size:10px;color:var(--muted)}
+@media(max-width:900px){.span-8,.span-6,.span-4{grid-column:span 12}.kpis{grid-template-columns:repeat(2,1fr)}.hero-mark{display:none}}
+@media(max-width:600px){.shell{padding:14px}.topbar{align-items:flex-start}.top-actions .pill{display:none}.brand h1{font-size:16px}.hero{padding:20px}.hero h2{font-size:22px}.nav{width:100%;overflow:auto}.nav button{white-space:nowrap;padding:10px 12px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.kpis{gap:9px}.kpi{padding:13px}.kpi strong{font-size:23px}.card{padding:16px}.scale span{font-size:9px}.scale b{font-size:14px}.detail-grid{grid-template-columns:1fr}}
+
+/* Pastel Sky & Blush Pink — presentation-only theme; application logic unchanged */
+:root{--bg:#f5f8ff;--surface:#ffffff;--surface2:#f8faff;--ink:#263751;--muted:#77849d;--line:#e4eafa;--teal:#6d9de0;--teal2:#477bc2;--mint:#e9f2ff;--blue:#eaf2ff;--amber:#fff5e8;--red:#fff0f5;--shadow:0 12px 34px rgba(91,119,181,.09);--radius:21px}
+body{background:radial-gradient(ellipse at 95% 0%,rgba(255,216,236,.45),transparent 36%),radial-gradient(ellipse at 0% 35%,rgba(210,234,255,.65),transparent 42%),#f5f8ff;min-height:100vh}
+.logo{background:linear-gradient(145deg,#82baf5,#bca4ef 65%,#f2a9ce);box-shadow:0 9px 24px rgba(143,159,223,.3)}
+.nav{background:#eaf0fd;border:1px solid #e1e9fb;box-shadow:0 4px 18px rgba(100,130,188,.06)}
+.nav button{color:#7282a0}.nav button.active{color:#557bc0;background:#fff;box-shadow:0 3px 12px rgba(107,141,205,.13)}
+.hero{background:linear-gradient(115deg,#e1f1ff 0%,#eef0ff 55%,#ffe8f3 100%);border-color:#e2e9fc;box-shadow:0 14px 32px rgba(128,154,209,.08)}
+.hero p{color:#677895}.eyebrow{color:#638bc9}.hero-mark{color:#a68bd6}
+.card,.kpi{border-color:#e5eaf9;box-shadow:var(--shadow)}.card{background:rgba(255,255,255,.95)}
+.kpi:nth-child(2){background:linear-gradient(150deg,#fff,#f4f7ff)}.kpi:nth-child(3){background:linear-gradient(150deg,#fff,#fff2f8)}.kpi:nth-child(4){background:linear-gradient(150deg,#fff,#f0f8ff)}
+.kpi-icon{background:linear-gradient(135deg,#e4f2ff,#fce8f3);color:#678dd1}
+.step-tag{background:#edf2ff;color:#6788c8}.field label,.question-title{color:#435573}
+input,select,textarea{border-color:#dfe7f8;background:#fbfcff;color:#263751}
+input:focus,select:focus,textarea:focus{border-color:#9abcf0;box-shadow:0 0 0 4px rgba(138,183,239,.18)}
+.choice span,.scale span{background:#fbfcff;color:#657692}.choice span:before{border-color:#bdc9e4}
+.choice input:checked+span,.scale input:checked+span{background:linear-gradient(110deg,#e8f4ff,#fff0f8);border-color:#a6c7ef;color:#5279b9}
+.choice input:checked+span:before{border-color:#77a8e5}.scale b{color:#485a77}.scale input:checked+span b{color:#5279b9}
+.btn{transition:transform .18s ease,box-shadow .18s ease,background .18s ease}.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(110deg,#7aaff0,#9b9fe9);box-shadow:0 8px 19px rgba(119,157,226,.22)}.btn.primary:hover{background:linear-gradient(110deg,#6098e2,#8887dc)}
+.btn.soft{background:#eaf2ff;color:#567ebc}.btn.ghost{color:#647693}.btn.danger{color:#bd6188}
+.progress{background:#e6eefd}.progress i{background:linear-gradient(90deg,#81baf6,#d7a0d8)}
+.note{background:linear-gradient(105deg,#edf6ff,#fff3fa);color:#697d9a}
+th{background:#f6f9ff;color:#7c8ca9}td{color:#4d607e}th,td,.question{border-bottom-color:#edf1fa}tr:hover td{background:#f8faff}
+.low{background:#e9f7f2;color:#38866c}.mid{background:#fff3e4;color:#a87b34}.high{background:#fff0f5;color:#ba638a}
+.bar{background:#edf1fc}.bar i{background:linear-gradient(90deg,#93c8f8,#c2a1e9)}
+.detail{background:#f6f9ff}.modal-backdrop{background:rgba(37,51,86,.58)}.toast{background:#455e8a}
+.pill{border-color:#e1e8f7;background:rgba(255,255,255,.82)}
+@media(prefers-reduced-motion:reduce){.btn{transition:none}.btn:hover{transform:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+ <header class="topbar">
+  <div class="brand"><div class="logo">☾</div><div><h1>Smart Sleep Care</h1><p>Sleep behavior & quality assessment</p></div></div>
+  <div class="top-actions"><span class="pill">Nursing assessment tool</span><span class="pill" id="connectionPill">● ยังไม่เชื่อมต่อ Backend</span></div>
+ </header>
+ <nav class="nav">
+  <button class="active" data-page="assessment">แบบประเมิน</button>
+  <button data-page="dashboard">Dashboard</button>
+  <button data-page="records">ข้อมูลรายบุคคล</button>
+  <button data-page="settings">ตั้งค่าระบบ</button>
+ </nav>
+
+ <section class="page active" id="page-assessment">
+  <div class="hero"><div><div class="eyebrow">Sleep health • Nursing innovation</div><h2>ประเมินการนอนหลับ<br>เพื่อการดูแลที่ตรงจุด</h2><p>บันทึกพฤติกรรมการนอน ปัจจัยด้านสุขภาพ และผลกระทบในเวลากลางวัน เพื่อใช้ประกอบการวางแผนส่งเสริมสุขภาพรายบุคคล</p></div><div class="hero-mark">☾</div></div>
+  <div class="progress"><i id="formProgress"></i></div>
+  <form id="sleepForm">
+   <div class="grid">
+    <div class="card span-12">
+     <div class="section-head"><div><h3>01 / ข้อมูลทั่วไป</h3><p>ข้อมูลพื้นฐานของผู้รับการประเมิน</p></div><span class="step-tag">PERSONAL PROFILE</span></div>
+     <div class="form-grid">
+      <div class="field"><label>รหัสผู้รับบริการ <span class="hint">(ไม่บังคับ / ใช้แทนชื่อได้)</span></label><input name="personId" placeholder="เช่น SC-0001"></div>
+      <div class="field"><label>ชื่อ–นามสกุล หรือรหัสอ้างอิง</label><input name="fullName" placeholder="ระบุชื่อหรือรหัสที่ไม่เปิดเผยตัวตน"></div>
+      <div class="field"><label>อายุ (ปี) *</label><input name="age" type="number" min="1" max="120" required placeholder="อายุ"></div>
+      <div class="field"><label>เพศ</label><select name="gender"><option value="">เลือกข้อมูล</option><option>ชาย</option><option>หญิง</option><option>อื่น ๆ</option><option>ไม่ประสงค์ระบุ</option></select></div>
+      <div class="field"><label>อาชีพ</label><select name="occupation"><option value="">เลือกอาชีพ</option><option>นักเรียน/นักศึกษา</option><option>ข้าราชการ/พนักงานรัฐ</option><option>พนักงานบริษัท</option><option>รับจ้าง/อาชีพอิสระ</option><option>ไม่ได้ประกอบอาชีพ</option><option>อื่น ๆ</option></select></div>
+      <div class="field"><label>ลักษณะการทำงาน</label><select name="workPattern"><option value="">เลือกข้อมูล</option><option>ทำงานช่วงกลางวัน</option><option>ทำงานเป็นกะ</option><option>ทำงานช่วงกลางคืน</option><option>ไม่ได้ทำงาน</option></select></div>
+      <div class="field"><label>โรคประจำตัว</label><select name="chronic"><option value="">เลือกข้อมูล</option><option>ไม่มี</option><option>มี</option><option>ไม่แน่ใจ</option></select></div>
+      <div class="field"><label>รายละเอียดโรคประจำตัว</label><input name="chronicDetail" placeholder="ถ้ามี โปรดระบุ"></div>
+      <div class="field"><label>ใช้ยาที่อาจมีผลต่อการนอนหรือไม่</label><select name="sleepMedication"><option value="">เลือกข้อมูล</option><option>ไม่ใช้</option><option>ใช้</option><option>ไม่แน่ใจ</option></select></div>
+      <div class="field"><label>ชื่อยา (ถ้าทราบ)</label><input name="medicationDetail" placeholder="ระบุชื่อยาได้"></div>
+     </div>
+    </div>
+    <div class="card span-12">
+     <div class="section-head"><div><h3>02 / รูปแบบการนอนหลับ</h3><p>ระบุพฤติกรรมโดยเฉลี่ยในช่วง 14 วันที่ผ่านมา</p></div><span class="step-tag">SLEEP PATTERN</span></div>
+     <div class="form-grid">
+      <div class="field"><label>เวลาเข้านอนโดยเฉลี่ย</label><input type="time" name="bedtime"></div>
+      <div class="field"><label>เวลาตื่นนอนโดยเฉลี่ย</label><input type="time" name="wakeTime"></div>
+      <div class="field"><label>ระยะเวลานอนต่อคืน (ชั่วโมง)</label><input type="number" name="sleepHours" min="0" max="24" step=".5" placeholder="เช่น 6.5"></div>
+      <div class="field"><label>ใช้เวลาก่อนหลับ (นาที)</label><input type="number" name="sleepLatency" min="0" max="600" placeholder="เช่น 30"></div>
+      <div class="field"><label>ตื่นกลางดึกเฉลี่ย (ครั้ง/คืน)</label><input type="number" name="nightAwakenings" min="0" max="30" placeholder="เช่น 2"></div>
+      <div class="field"><label>งีบหลับระหว่างวัน (นาที/วัน)</label><input type="number" name="napMinutes" min="0" max="1440" placeholder="เช่น 20"></div>
+      <div class="field"><label>ใช้โทรศัพท์ก่อนนอน (นาที)</label><input type="number" name="phoneMinutes" min="0" max="1440" placeholder="เช่น 45"></div>
+      <div class="field"><label>ความสม่ำเสมอของเวลาเข้านอน</label><select name="sleepRegularity"><option value="">เลือกข้อมูล</option><option>สม่ำเสมอ</option><option>ไม่สม่ำเสมอ</option></select></div>
+     </div>
+    </div>
+    <div class="card span-12">
+     <div class="section-head"><div><h3>03 / พฤติกรรมและคุณภาพการนอน</h3><p>เลือกความถี่ที่ตรงกับพฤติกรรมในช่วง 14 วันที่ผ่านมา</p></div><span class="step-tag">20 ITEMS • 0–4</span></div>
+     <div class="note">0 = ไม่เคย · 1 = นาน ๆ ครั้ง · 2 = บางครั้ง · 3 = บ่อยครั้ง · 4 = เป็นประจำ<br>คะแนนเป็นความถี่ของพฤติกรรม/อาการ ไม่ใช่คะแนนวินิจฉัยโรค</div>
+     <div id="questionnaire"></div>
+    </div>
+    <div class="card span-6">
+     <div class="section-head"><div><h3>04A / ปัจจัยด้านสุขภาพกาย</h3><p>เลือกได้มากกว่า 1 ข้อ</p></div><span class="step-tag">PHYSICAL</span></div>
+     <div id="physicalChoices" class="choice-grid"></div>
+     <div class="field" style="margin-top:12px"><label>อาการทางกายอื่น ๆ</label><input name="physicalOther" placeholder="ระบุเพิ่มเติม"></div>
+    </div>
+    <div class="card span-6">
+     <div class="section-head"><div><h3>04B / ปัจจัยด้านจิตใจ</h3><p>เลือกได้มากกว่า 1 ข้อ</p></div><span class="step-tag">PSYCHOLOGICAL</span></div>
+     <div id="mentalChoices" class="choice-grid"></div>
+     <div class="field" style="margin-top:12px"><label>ปัจจัยด้านจิตใจอื่น ๆ</label><input name="mentalOther" placeholder="ระบุเพิ่มเติม"></div>
+    </div>
+    <div class="card span-6">
+     <div class="section-head"><div><h3>04C / พฤติกรรมสุขภาพ</h3><p>ข้อมูลประกอบการประเมิน</p></div><span class="step-tag">LIFESTYLE</span></div>
+     <div class="form-grid">
+      <div class="field"><label>การดื่มคาเฟอีน</label><select name="caffeine"><option value="">เลือกข้อมูล</option><option>ไม่ดื่ม</option><option>1 ครั้ง/วัน</option><option>2–3 ครั้ง/วัน</option><option>มากกว่า 3 ครั้ง/วัน</option></select></div>
+      <div class="field"><label>การออกกำลังกาย</label><select name="exercise"><option value="">เลือกข้อมูล</option><option>ไม่ออกกำลังกาย</option><option>1–2 วัน/สัปดาห์</option><option>3–5 วัน/สัปดาห์</option><option>มากกว่า 5 วัน/สัปดาห์</option></select></div>
+      <div class="field"><label>บุหรี่/ผลิตภัณฑ์นิโคติน</label><select name="nicotine"><option value="">เลือกข้อมูล</option><option>ไม่มี</option><option>มี</option></select></div>
+      <div class="field"><label>เครื่องดื่มแอลกอฮอล์</label><select name="alcohol"><option value="">เลือกข้อมูล</option><option>ไม่ดื่ม</option><option>ดื่มเป็นครั้งคราว</option><option>ดื่มเป็นประจำ</option></select></div>
+     </div>
+    </div>
+    <div class="card span-6">
+     <div class="section-head"><div><h3>05 / ความต้องการและความพร้อม</h3><p>ใช้วางแผนให้คำแนะนำรายบุคคล</p></div><span class="step-tag">CARE PLAN</span></div>
+     <div class="form-grid">
+      <div class="field"><label>ท่านคิดว่ามีปัญหาการนอนหรือไม่</label><select name="selfRated"><option value="">เลือกข้อมูล</option><option>ไม่มี</option><option>มีเล็กน้อย</option><option>มีปานกลาง</option><option>มีมาก</option></select></div>
+      <div class="field"><label>ต้องการปรับปรุงการนอนหรือไม่</label><select name="willingness"><option value="">เลือกข้อมูล</option><option>ต้องการ</option><option>ไม่ต้องการ</option><option>ยังไม่แน่ใจ</option></select></div>
+      <div class="field full"><label>หัวข้อที่สนใจรับคำแนะนำ <span class="hint">เลือกได้หลายข้อ</span></label><div id="adviceChoices" class="choice-grid"></div></div>
+      <div class="field full"><label>ข้อเสนอแนะ/ปัญหาเพิ่มเติม</label><textarea name="comments" placeholder="บันทึกข้อมูลเพิ่มเติม..."></textarea></div>
+     </div>
+    </div>
+    <div class="card span-12">
+     <div class="section-head"><div><h3>สรุปผลเบื้องต้นก่อนบันทึก</h3><p>ระบบคำนวณคะแนนจากข้อคำถาม 1–20 โดยอัตโนมัติ</p></div><span class="step-tag">AUTO SCORING</span></div>
+     <div class="kpis" style="margin:0"><div class="kpi"><div class="kpi-top">คะแนนรวม <span class="kpi-icon">✦</span></div><strong id="liveTotal">—</strong><small>เต็ม 80 คะแนน</small></div><div class="kpi"><div class="kpi-top">Sleep quality <span class="kpi-icon">☾</span></div><strong id="liveQuality">—</strong><small>ข้อ 6–10 / 20 คะแนน</small></div><div class="kpi"><div class="kpi-top">Daytime impact <span class="kpi-icon">☀</span></div><strong id="liveDay">—</strong><small>ข้อ 11–15 / 20 คะแนน</small></div><div class="kpi"><div class="kpi-top">พฤติกรรมเสี่ยง <span class="kpi-icon">⌁</span></div><strong id="liveBehavior">—</strong><small>ข้อ 1–5 / 20 คะแนน</small></div></div>
+     <div class="note">คะแนนรวมและช่วงแปลผลเป็นเกณฑ์เบื้องต้นที่เสนอขึ้นสำหรับแบบประเมินนี้ ยังไม่ได้ผ่านการตรวจสอบคุณภาพเครื่องมือ ไม่ใช่เครื่องมือวินิจฉัยโรค ควรพิจารณาคะแนนรายด้านและอาการสำคัญร่วมด้วย</div>
+     <div class="actions"><button type="reset" class="btn ghost">ล้างแบบประเมิน</button><button type="submit" class="btn primary" id="submitBtn">บันทึกผลการประเมิน <span>→</span></button></div>
+    </div>
+   </div>
+  </form>
+ </section>
+
+ <section class="page" id="page-dashboard">
+  <div class="hero"><div><div class="eyebrow">Clinical overview</div><h2>Sleep Care Dashboard</h2><p>ภาพรวมข้อมูลการประเมิน แนวโน้มพฤติกรรม และประเด็นที่ควรติดตามทางการพยาบาล</p></div><div class="hero-mark">▥</div></div>
+  <div class="toolbar" style="margin-bottom:15px"><select id="dashPeriod"><option value="all">ทุกช่วงเวลา</option><option value="7">7 วันล่าสุด</option><option value="30">30 วันล่าสุด</option></select><button class="btn soft" id="refreshDash">↻ รีเฟรชข้อมูล</button><span class="tiny" id="lastUpdated"></span></div>
+  <div class="kpis">
+   <div class="kpi"><div class="kpi-top">ผู้รับการประเมินทั้งหมด <span class="kpi-icon">♙</span></div><strong id="kTotal">0</strong><small>จำนวนแบบประเมิน</small></div>
+   <div class="kpi"><div class="kpi-top">คะแนนเฉลี่ย <span class="kpi-icon">✦</span></div><strong id="kAverage">—</strong><small>จากคะแนนเต็ม 80</small></div>
+   <div class="kpi"><div class="kpi-top">กลุ่มคะแนนสูง <span class="kpi-icon">⌁</span></div><strong id="kHigh">0</strong><small>คะแนน 41 คะแนนขึ้นไป</small></div>
+   <div class="kpi"><div class="kpi-top">ชั่วโมงนอนเฉลี่ย <span class="kpi-icon">☾</span></div><strong id="kSleep">—</strong><small>ชั่วโมงต่อคืน</small></div>
+  </div>
+  <div class="grid">
+   <div class="card span-6"><div class="section-head"><div><h3>การกระจายระดับคะแนน</h3><p>จำแนกตามเกณฑ์เบื้องต้นของแบบประเมิน</p></div></div><div id="levelBars"></div></div>
+   <div class="card span-6"><div class="section-head"><div><h3>คะแนนเฉลี่ยรายด้าน</h3><p>แสดงค่าเฉลี่ยของแต่ละหมวด (0–20)</p></div></div><div id="domainBars"></div></div>
+   <div class="card span-12"><div class="section-head"><div><h3>ปัจจัยที่ถูกรายงานบ่อย</h3><p>จำนวนผู้ตอบที่เลือกแต่ละปัจจัย</p></div></div><div id="factorBars"></div></div>
+  </div>
+ </section>
+
+ <section class="page" id="page-records">
+  <div class="hero"><div><div class="eyebrow">Patient-level insight</div><h2>ข้อมูลรายบุคคล</h2><p>ค้นหา เปิดดูรายละเอียด และตรวจสอบผลประเมินแต่ละรายการ เพื่อประกอบการติดตามและวางแผนการพยาบาล</p></div><div class="hero-mark">⌕</div></div>
+  <div class="card">
+   <div class="section-head"><div><h3>รายการประเมินทั้งหมด</h3><p id="recordCount">0 รายการ</p></div><div class="toolbar"><input id="searchRecords" placeholder="ค้นหาชื่อ / รหัส"><select id="filterLevel"><option value="">ทุกระดับคะแนน</option><option value="low">0–20 ต่ำ</option><option value="mid">21–40 ปานกลาง</option><option value="high">41–80 สูง</option></select><button class="btn soft" id="exportCsv">Export CSV</button></div></div>
+   <div class="table-wrap"><table><thead><tr><th>วันที่ประเมิน</th><th>รหัส / ชื่อ</th><th>อายุ</th><th>ชั่วโมงนอน</th><th>คะแนนรวม</th><th>ระดับเบื้องต้น</th><th>รายละเอียด</th></tr></thead><tbody id="recordsBody"><tr><td colspan="7" class="empty"><b>☾</b>ยังไม่มีข้อมูล หรือยังไม่ได้เชื่อมต่อ Backend</td></tr></tbody></table></div>
+  </div>
+ </section>
+
+ <section class="page" id="page-settings">
+  <div class="hero"><div><div class="eyebrow">System configuration</div><h2>ตั้งค่าการเชื่อมต่อ</h2><p>ใส่ Web App URL จาก Google Apps Script หลัง Deploy เพื่อเปิดใช้งานการบันทึกและดึงข้อมูลจาก Google Sheets</p></div><div class="hero-mark">⚙</div></div>
+  <div class="card">
+   <div class="section-head"><div><h3>Google Apps Script Web App</h3><p>URL จะถูกเก็บไว้ในเบราว์เซอร์เครื่องนี้</p></div><span class="step-tag">BACKEND API</span></div>
+   <div class="config"><input id="apiUrl" placeholder="https://script.google.com/macros/s/...../exec"><button class="btn primary" id="saveApi">บันทึก URL</button><button class="btn ghost" id="testApi">ทดสอบการเชื่อมต่อ</button></div>
+   <div class="note">วิธีติดตั้ง: 1) เปิด script.google.com สร้าง New project 2) วางไฟล์ GAS ใน Code.gs 3) รัน setupSmartSleepCare() เพื่อสร้าง Google Sheets ใหม่และดู URL ใน Execution log 4) รัน seedDemoData() เพื่อเพิ่มข้อมูลสมมติ 30 รายการ 5) Deploy เป็น Web app และนำ URL /exec มาใส่ที่นี่<br>สำหรับการใช้งานจริง ให้รัน removeDemoData() เพื่อลบข้อมูลจำลอง และควบคุมสิทธิ์เข้าถึงข้อมูลสุขภาพตามนโยบายหน่วยงาน</div>
+  </div>
+  <div class="card" style="margin-top:16px">
+   <div class="section-head"><div><h3>โครงสร้างข้อมูลที่ระบบส่งไปยัง Google Sheets</h3><p>Backend จะสร้างหัวคอลัมน์ให้อัตโนมัติเมื่อชีตว่าง</p></div></div>
+   <div class="tiny">บันทึกข้อมูลพื้นฐาน · รูปแบบการนอน · คะแนนรายข้อ 1–20 · คะแนนรายด้าน · ปัจจัยสุขภาพกาย/จิตใจ · พฤติกรรมสุขภาพ · ความต้องการรับคำแนะนำ · ข้อเสนอแนะ</div>
+  </div>
+ </section>
+</div>
+
+<div class="modal-backdrop" id="detailModal"><div class="modal"><div class="modal-head"><h3>รายละเอียดผลประเมินรายบุคคล</h3><button class="btn ghost" id="closeModal">ปิด ✕</button></div><div id="detailContent"></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const QUESTIONS=[
+ {group:"ด้านที่ 1 · พฤติกรรมก่อนเข้านอน",items:["ฉันใช้โทรศัพท์มือถือหรืออุปกรณ์อิเล็กทรอนิกส์ก่อนนอน","ฉันดื่มชา กาแฟ หรือเครื่องดื่มที่มีคาเฟอีนในช่วงเย็น","ฉันรับประทานอาหารมื้อหนักก่อนเข้านอน","ฉันทำกิจกรรมที่กระตุ้นสมอง เช่น เล่นเกมหรือทำงาน ก่อนนอน","ฉันเข้านอนไม่เป็นเวลาในแต่ละวัน"]},
+ {group:"ด้านที่ 2 · ปัญหาและคุณภาพการนอน",items:["ฉันใช้เวลานานกว่าจะสามารถหลับได้","ฉันตื่นขึ้นระหว่างคืนและไม่สามารถหลับต่อได้ง่าย","ฉันตื่นเร็วกว่าที่ต้องการ","ฉันรู้สึกว่านอนหลับไม่สนิท","ฉันรู้สึกว่านอนหลับไม่เพียงพอ แม้จะใช้เวลาอยู่บนเตียงนาน"]},
+ {group:"ด้านที่ 3 · ผลกระทบในเวลากลางวัน",items:["ฉันรู้สึกง่วงนอนระหว่างวัน","ฉันรู้สึกอ่อนเพลียหรือไม่มีพลังงาน","ฉันมีปัญหาในการจดจ่อหรือมีสมาธิ","ฉันรู้สึกหงุดหงิดหรืออารมณ์แปรปรวน","ฉันรู้สึกว่าการนอนหลับส่งผลกระทบต่อการเรียนหรือการทำงาน"]},
+ {group:"ด้านที่ 4 · สิ่งแวดล้อมและปัจจัยรบกวนการนอน",items:["เสียงรบกวนทำให้ฉันตื่นหรือหลับยาก","แสงสว่างในห้องรบกวนการนอนหลับ","อุณหภูมิห้องไม่เหมาะสมต่อการนอน","ฉันถูกรบกวนจากบุคคลหรือกิจกรรมอื่นระหว่างนอน","ฉันรู้สึกไม่ผ่อนคลายหรือไม่สบายตัวขณะนอน"]}
+];
+const PHYSICAL=["ปวดตามร่างกายหรือปวดเรื้อรัง","ปวดศีรษะ","ไอหรือหายใจไม่สะดวกขณะนอน","ปัสสาวะบ่อยในเวลากลางคืน","กรดไหลย้อนหรือแสบร้อนกลางอก","คันหรือมีอาการไม่สบายตัว","กรนเสียงดัง","สะดุ้งตื่นคล้ายหายใจไม่ออก","ไม่มีอาการดังกล่าว"];
+const MENTAL=["เครียดจากการเรียนหรือการทำงาน","วิตกกังวลก่อนนอน","คิดมากจนไม่สามารถหลับได้","รู้สึกเศร้าหรือหมดกำลังใจ","ปัญหาครอบครัวหรือความสัมพันธ์","ไม่มีปัจจัยดังกล่าว"];
+const ADVICE=["การจัดตารางเวลานอน","เทคนิคการผ่อนคลายก่อนนอน","การลดการใช้โทรศัพท์ก่อนนอน","การจัดสภาพแวดล้อมห้องนอน","การจัดการความเครียด","การออกกำลังกายเพื่อส่งเสริมการนอน","การดูแลตนเองเมื่อมีปัญหานอนไม่หลับ"];
+const SCALE=["ไม่เคย","นาน ๆ ครั้ง","บางครั้ง","บ่อยครั้ง","เป็นประจำ"];
+let records=[];let apiUrl=localStorage.getItem("sleepApiUrl")||"";
+const $=s=>document.querySelector(s);
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2600)}
+function renderChoices(id,items,name){$(id).innerHTML=items.map((x,i)=>`<label class="choice multi"><input type="checkbox" name="${name}" value="${esc(x)}"><span>${esc(x)}</span></label>`).join("");}
+function renderQuestions(){
+ let n=0;$("#questionnaire").innerHTML=QUESTIONS.map((g,gi)=>`<div style="margin-top:18px"><div class="eyebrow">${g.group}</div>${g.items.map((q,qi)=>{n++;return `<div class="question"><div class="question-title">${n}. ${q}</div><div class="scale">${SCALE.map((s,v)=>`<label><input type="radio" name="q${n}" value="${v}" required><span><b>${v}</b>${s}</span></label>`).join("")}</div></div>`}).join("")}</div>`).join("");
+}
+renderQuestions();renderChoices("#physicalChoices",PHYSICAL,"physical");renderChoices("#mentalChoices",MENTAL,"mental");renderChoices("#adviceChoices",ADVICE,"advice");
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("active",x===b));document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id==="page-"+b.dataset.page));if(b.dataset.page==="dashboard")loadRecords();if(b.dataset.page==="records")loadRecords()}));
+function selected(name){return [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(x=>x.value)}
+function getScores(){let a=[];for(let i=1;i<=20;i++){let v=document.querySelector(`input[name="q${i}"]:checked`);a.push(v?Number(v.value):null)}let sum=arr=>arr.every(x=>x!==null)?arr.reduce((x,y)=>x+y,0):null;return {answers:a,total:sum(a),behavior:sum(a.slice(0,5)),quality:sum(a.slice(5,10)),daytime:sum(a.slice(10,15)),environment:sum(a.slice(15,20))}}
+function level(n){if(n===null||n===undefined)return "ยังไม่ครบ";if(n<=20)return "ต่ำ";if(n<=40)return "ปานกลาง";return "สูง"}
+function updateLive(){let s=getScores();$("#liveTotal").textContent=s.total??"—";$("#liveQuality").textContent=s.quality??"—";$("#liveDay").textContent=s.daytime??"—";$("#liveBehavior").textContent=s.behavior??"—";let count=document.querySelectorAll('#questionnaire input:checked').length;$("#formProgress").style.width=(count/20*100)+"%"}
+$("#questionnaire").addEventListener("change",updateLive);
+$("#sleepForm").addEventListener("reset",()=>setTimeout(updateLive,30));
+function formObject(){let f=$("#sleepForm"),d=Object.fromEntries(new FormData(f).entries()),s=getScores();d.physicalFactors=selected("physical");d.mentalFactors=selected("mental");d.adviceTopics=selected("advice");d.answers=s.answers;d.totalScore=s.total;d.behaviorScore=s.behavior;d.qualityScore=s.quality;d.daytimeScore=s.daytime;d.environmentScore=s.environment;d.level=level(s.total);d.createdAt=new Date().toISOString();d.clientSubmissionId="WEB-"+Date.now()+"-"+Math.random().toString(36).slice(2,10);return d}
+$("#sleepForm").addEventListener("submit",async e=>{e.preventDefault();let s=getScores();if(s.total===null){toast("กรุณาตอบคำถามความถี่ให้ครบทั้ง 20 ข้อ");return}let d=formObject();if(!d.age){toast("กรุณาระบุอายุ");return}let btn=$("#submitBtn");btn.disabled=true;btn.textContent="กำลังบันทึก...";
+ try{if(apiUrl){await apiPost({action:"save",record:d});await new Promise(r=>setTimeout(r,1300));await loadRecords();if(!records.some(r=>r.clientSubmissionId===d.clientSubmissionId))throw new Error("ยังยืนยันการบันทึกจากฐานข้อมูลไม่ได้ กรุณาตรวจ Google Sheets ก่อนส่งซ้ำ");toast("ตรวจสอบแล้ว: บันทึกข้อมูลลง Google Sheets สำเร็จ")}else{records.unshift({...d,localOnly:true,recordId:"LOCAL-"+Date.now()});toast("บันทึกในหน้านี้แล้ว — ตั้งค่า Backend เพื่อเก็บข้อมูลถาวร");renderAll()};e.target.reset();updateLive()}catch(err){toast("บันทึกไม่สำเร็จ: "+err.message)}finally{btn.disabled=false;btn.innerHTML='บันทึกผลการประเมิน <span>→</span>'}});
+function apiGet(action){return new Promise((resolve,reject)=>{const cb="ssc_cb_"+Date.now()+"_"+Math.floor(Math.random()*10000);const u=new URL(apiUrl);u.searchParams.set("action",action);u.searchParams.set("callback",cb);const script=document.createElement("script");const timer=setTimeout(()=>{cleanup();reject(new Error("หมดเวลารอ Backend"))},15000);function cleanup(){clearTimeout(timer);delete window[cb];script.remove()}window[cb]=(j)=>{cleanup();if(!j.success)reject(new Error(j.message||"API error"));else resolve(j)};script.onerror=()=>{cleanup();reject(new Error("เรียก Backend ไม่สำเร็จ"))};script.src=u.toString();document.body.appendChild(script)})}
+async function apiPost(body){await fetch(apiUrl,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(body)});return {success:true}}
+async function loadRecords(){if(!apiUrl){renderAll();return}try{let j=await apiGet("list");records=j.records||[];$("#connectionPill").textContent="● เชื่อมต่อแล้ว";$("#connectionPill").style.color="#167c70";renderAll()}catch(e){$("#connectionPill").textContent="● เชื่อมต่อไม่สำเร็จ";$("#connectionPill").style.color="#b34c47";toast("ดึงข้อมูลไม่สำเร็จ: "+e.message);renderAll()}}
+function num(v){let n=Number(v);return Number.isFinite(n)?n:null}
+function normalize(r){let x={...r};if(typeof x.answers==="string"){try{x.answers=JSON.parse(x.answers)}catch{}}if(typeof x.physicalFactors==="string"){try{x.physicalFactors=JSON.parse(x.physicalFactors)}catch{x.physicalFactors=x.physicalFactors.split(",").filter(Boolean)}}if(typeof x.mentalFactors==="string"){try{x.mentalFactors=JSON.parse(x.mentalFactors)}catch{x.mentalFactors=x.mentalFactors.split(",").filter(Boolean)}}if(typeof x.adviceTopics==="string"){try{x.adviceTopics=JSON.parse(x.adviceTopics)}catch{x.adviceTopics=x.adviceTopics.split(",").filter(Boolean)}}["totalScore","behaviorScore","qualityScore","daytimeScore","environmentScore","age","sleepHours"].forEach(k=>x[k]=num(x[k]));return x}
+function renderAll(){records=records.map(normalize);renderDashboard();renderRecords()}
+function withinPeriod(r){let p=$("#dashPeriod").value;if(p==="all")return true;let d=new Date(r.createdAt);return !isNaN(d)&&Date.now()-d.getTime()<=Number(p)*86400000}
+function renderDashboard(){let data=records.filter(withinPeriod),valid=data.filter(r=>r.totalScore!==null);$("#kTotal").textContent=data.length;$("#kAverage").textContent=valid.length?(valid.reduce((a,r)=>a+r.totalScore,0)/valid.length).toFixed(1):"—";$("#kHigh").textContent=valid.filter(r=>r.totalScore>=41).length;let sl=data.map(r=>r.sleepHours).filter(x=>x!==null);$("#kSleep").textContent=sl.length?(sl.reduce((a,b)=>a+b,0)/sl.length).toFixed(1):"—";
+ let counts=[{n:"ต่ำ · 0–20",c:valid.filter(r=>r.totalScore<=20).length},{n:"ปานกลาง · 21–40",c:valid.filter(r=>r.totalScore>20&&r.totalScore<=40).length},{n:"สูง · 41–80",c:valid.filter(r=>r.totalScore>40).length}];$("#levelBars").innerHTML=bars(counts,valid.length);
+ let domains=[["พฤติกรรมก่อนนอน","behaviorScore"],["คุณภาพการนอน","qualityScore"],["ผลกระทบกลางวัน","daytimeScore"],["สิ่งแวดล้อม","environmentScore"]].map(([n,k])=>({n,c:data.map(r=>r[k]).filter(x=>x!==null).length?data.map(r=>r[k]).filter(x=>x!==null).reduce((a,b)=>a+b,0)/data.map(r=>r[k]).filter(x=>x!==null).length:0,max:20,display:true}));$("#domainBars").innerHTML=bars(domains,data.length,true);
+ let factors=[...PHYSICAL.slice(0,-1),...MENTAL.slice(0,-1)].map(n=>({n,c:data.filter(r=>[...(r.physicalFactors||[]),...(r.mentalFactors||[])].includes(n)).length})).filter(x=>x.c).sort((a,b)=>b.c-a.c).slice(0,8);$("#factorBars").innerHTML=factors.length?bars(factors,data.length):'<div class="empty">ยังไม่มีข้อมูลปัจจัยสุขภาพ</div>';
+ $("#lastUpdated").textContent="อัปเดต "+new Date().toLocaleString("th-TH")}
+function bars(items,total,avg=false){if(!items.length)return '<div class="empty">ยังไม่มีข้อมูลสำหรับแสดงผล</div>';return items.map(x=>{let v=x.c||0,max=x.max||total||1,p=Math.min(100,v/max*100);return `<div class="bar-row"><span>${esc(x.n)}</span><div class="bar"><i style="width:${p}%"></i></div><b>${avg?v.toFixed(1):v}</b></div>`}).join("")}
+function renderRecords(){let q=$("#searchRecords").value.toLowerCase(),f=$("#filterLevel").value;let data=records.filter(r=>{let name=((r.fullName||"")+" "+(r.personId||"")).toLowerCase();let lv=r.totalScore<=20?"low":r.totalScore<=40?"mid":"high";return (!q||name.includes(q))&&(!f||f===lv)});$("#recordCount").textContent=data.length+" รายการ";$("#recordsBody").innerHTML=data.length?data.slice().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map((r)=>{let idx=records.indexOf(r),lv=r.totalScore<=20?"low":r.totalScore<=40?"mid":"high";return `<tr><td>${r.createdAt?new Date(r.createdAt).toLocaleDateString("th-TH"):"—"}</td><td><b>${esc(r.fullName||"ไม่ระบุชื่อ")}</b><br><span class="tiny">${esc(r.personId||"ไม่มีรหัส")}</span></td><td>${esc(r.age??"—")}</td><td>${esc(r.sleepHours??"—")}</td><td><b>${esc(r.totalScore??"—")}/80</b></td><td><span class="status ${lv}">${level(r.totalScore)}</span></td><td><button class="btn soft" onclick="showDetail(${idx})">ดูข้อมูล</button></td></tr>`}).join(""):'<tr><td colspan="7" class="empty"><b>⌕</b>ไม่พบข้อมูลที่ตรงกัน</td></tr>'}
+window.showDetail=function(i){let r=records[i];if(!r)return;let fields=[["รหัสผู้รับบริการ",r.personId],["ชื่อ/รหัสอ้างอิง",r.fullName],["อายุ",r.age],["เพศ",r.gender],["อาชีพ",r.occupation],["ลักษณะงาน",r.workPattern],["เวลาเข้านอน",r.bedtime],["เวลาตื่น",r.wakeTime],["ชั่วโมงนอน",r.sleepHours],["เวลาที่ใช้ก่อนหลับ",r.sleepLatency],["ตื่นกลางดึก",r.nightAwakenings],["งีบกลางวัน",r.napMinutes],["ใช้โทรศัพท์ก่อนนอน",r.phoneMinutes],["คะแนนรวม",`${r.totalScore}/80 (${level(r.totalScore)})`],["คะแนนพฤติกรรมก่อนนอน",r.behaviorScore],["คะแนนคุณภาพการนอน",r.qualityScore],["คะแนนผลกระทบกลางวัน",r.daytimeScore],["คะแนนสิ่งแวดล้อม",r.environmentScore],["ปัจจัยด้านร่างกาย",(r.physicalFactors||[]).join(" · ")],["ปัจจัยด้านจิตใจ",(r.mentalFactors||[]).join(" · ")],["คำแนะนำที่สนใจ",(r.adviceTopics||[]).join(" · ")],["ข้อเสนอแนะ",r.comments]];$("#detailContent").innerHTML=`<div class="kpis" style="grid-template-columns:repeat(3,1fr)"><div class="kpi"><small>คะแนนรวม</small><strong>${r.totalScore??"—"}</strong></div><div class="kpi"><small>คุณภาพการนอน</small><strong>${r.qualityScore??"—"}</strong></div><div class="kpi"><small>ชั่วโมงนอน</small><strong>${r.sleepHours??"—"}</strong></div></div><div class="detail-grid">${fields.map(([a,b])=>`<div class="detail"><small>${esc(a)}</small><b>${esc(b??"—")}</b></div>`).join("")}</div><div class="note">ผลนี้เป็นข้อมูลคัดกรองเบื้องต้น ควรประเมินอาการสำคัญและบริบททางคลินิกร่วมด้วย ไม่ใช้แทนการวินิจฉัย</div>`;$("#detailModal").classList.add("show")};
+$("#closeModal").onclick=()=>$("#detailModal").classList.remove("show");$("#detailModal").addEventListener("click",e=>{if(e.target.id==="detailModal")$("#detailModal").classList.remove("show")});
+$("#searchRecords").addEventListener("input",renderRecords);$("#filterLevel").addEventListener("change",renderRecords);$("#dashPeriod").addEventListener("change",renderDashboard);$("#refreshDash").onclick=loadRecords;
+$("#saveApi").onclick=()=>{apiUrl=$("#apiUrl").value.trim();localStorage.setItem("sleepApiUrl",apiUrl);toast("บันทึก URL แล้ว");loadRecords()};
+$("#testApi").onclick=async()=>{apiUrl=$("#apiUrl").value.trim();if(!apiUrl){toast("กรุณาใส่ Web App URL");return}try{await apiGet("ping");localStorage.setItem("sleepApiUrl",apiUrl);$("#connectionPill").textContent="● เชื่อมต่อแล้ว";toast("เชื่อมต่อ Backend สำเร็จ")}catch(e){toast("ทดสอบไม่สำเร็จ: "+e.message)}};
+$("#apiUrl").value=apiUrl;
+$("#exportCsv").onclick=()=>{if(!records.length){toast("ยังไม่มีข้อมูลสำหรับส่งออก");return}let cols=["createdAt","personId","fullName","age","gender","occupation","workPattern","bedtime","wakeTime","sleepHours","sleepLatency","nightAwakenings","napMinutes","phoneMinutes","totalScore","behaviorScore","qualityScore","daytimeScore","environmentScore","physicalFactors","mentalFactors","caffeine","exercise","nicotine","alcohol","selfRated","willingness","adviceTopics","comments"];let val=v=>'"'+String(Array.isArray(v)?v.join("; "):v??"").replace(/"/g,'""')+'"';let csv="\ufeff"+[cols.join(","),...records.map(r=>cols.map(k=>val(r[k])).join(","))].join("\r\n");let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="SmartSleepCare_records.csv";a.click();URL.revokeObjectURL(a.href)};
+if(apiUrl)loadRecords();else renderAll();updateLive();
+</script>
+</body></html>
